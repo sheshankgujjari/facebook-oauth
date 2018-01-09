@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/facebook-oauth.iml" filepath="$PROJECT_DIR$/facebook-oauth.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/facebook-oauth_main.iml" filepath="$PROJECT_DIR$/.idea/modules/facebook-oauth_main.iml" group="facebook-oauth" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/facebook-oauth_test.iml" filepath="$PROJECT_DIR$/.idea/modules/facebook-oauth_test.iml" group="facebook-oauth" />
+    </modules>
+  </component>
+</project>

@@ -1,10 +1,10 @@
+
 package facebook.javafx;
 
 import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
 import com.restfb.Version;
 import com.restfb.scope.ScopeBuilder;
-
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker;
 import javafx.geometry.HPos;
@@ -13,7 +13,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 
-public class Browser extends Region {
+public class RestBrowser extends Region {
 
   public static final String SUCCESS_URL = "https://www.facebook.com/connect/login_success.html";
   final WebView browser = new WebView();
@@ -24,42 +24,46 @@ public class Browser extends Region {
 
   private final String appSecret;
 
-  public Browser(String appId, String appSecret) {
+  public RestBrowser(String appId, String appSecret) {
     this.appId = appId;
     this.appSecret = appSecret;
     // add the web view to the scene
     getChildren().add(browser);
   }
 
-  public void showLogin() {
+  public String[] showLogin() {
     DefaultFacebookClient facebookClient = new DefaultFacebookClient(Version.LATEST);
     ScopeBuilder scopes = new ScopeBuilder();
     String loadUrl = facebookClient.getLoginDialogUrl(appId, SUCCESS_URL, scopes);
+    final String[] result = {};
     webEngine.load(loadUrl + "&display=popup&response_type=code");
     webEngine.getLoadWorker().stateProperty().addListener(
-            (ObservableValue<? extends Worker.State> observable, Worker.State oldValue, Worker.State newValue) -> {
-              if (newValue != Worker.State.SUCCEEDED) {
-                return;
-              }
+      (ObservableValue<? extends Worker.State> observable, Worker.State oldValue, Worker.State newValue) -> {
+        if (newValue != Worker.State.SUCCEEDED) {
+          return;
+        }
 
-              String myUrl = webEngine.getLocation();
+        String myUrl = webEngine.getLocation();
 
-              if ("https://www.facebook.com/dialog/close".equals(myUrl)) {
-                System.out.println("dialog closed");
-                System.exit(0);
-              }
+        if ("https://www.facebook.com/dialog/close".equals(myUrl)) {
+          System.out.println("dialog closed");
+          System.exit(0);
+        }
 
-              if (myUrl.startsWith(SUCCESS_URL)) {
-                System.out.println(myUrl);
-                int pos = myUrl.indexOf("code=");
-                code = myUrl.substring(pos + "code=".length());
-                FacebookClient.AccessToken token = facebookClient.obtainUserAccessToken(appId,
-                        appSecret, SUCCESS_URL, code);
-                System.out.println("Accesstoken: " + token.getAccessToken());
-                System.out.println("Expires: " + token.getExpires());
-              }
+        if (myUrl.startsWith(SUCCESS_URL)) {
+          System.out.println(myUrl);
+          int pos = myUrl.indexOf("code=");
+          code = myUrl.substring(pos + "code=".length());
+          FacebookClient.AccessToken token = facebookClient.obtainUserAccessToken(appId,
+                  appSecret, SUCCESS_URL, code);
+          System.out.println("Accesstoken: " + token.getAccessToken());
+          System.out.println("Expires: " + token.getExpires());
+          result[0] = token.getAccessToken();
+          result[1] = token.getExpires().toString();
+        }
 
-            });
+      });
+    return result;
   }
 
   @Override
@@ -78,5 +82,5 @@ public class Browser extends Region {
   protected double computePrefHeight(double width) {
     return 600;
   }
-}
 
+}

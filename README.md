@@ -1,4 +1,14 @@
-# sample-spring-rest-service
+# GET OAUTH using maven
+```mvn compile
+```
+
+## to get acccess token
+```
+mvn exec:java@run-login-example -Dapp_id=APP_ID -Dapp_secret=APP_SECRET
+```
+
+
+# REST FB OAUTH
 Rest API using spring
 
 
@@ -19,7 +29,7 @@ Build the jar
 Run the Jar after build
 
 ```
-java -jar build/libs/gs-rest-service-0.1.0.jar
+ java -jar target/fcebook-oauth-1.0.jar
 ```
 
 
@@ -41,7 +51,7 @@ Build the JAR file
 
  Run the jar after maven build
 ```
- java -jar target/gs-rest-service-0.1.0.jar
+ java -jar target/fcebook-oauth-1.0.jar
  ```
 
 
